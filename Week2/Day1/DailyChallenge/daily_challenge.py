@@ -43,6 +43,7 @@ class Pagination:
     def display_current_page(self):
         return "\n".join(self.get_visible_items())
 
+
 alphabetList = list("abcdefghijklmnopqrstuvwxyz")
 p = Pagination(alphabetList, 4)
 
