@@ -1,0 +1,103 @@
+
+body {
+    font-family: Arial, sans-serif;
+    color: #12345a;
+    background-color: #ffffff;
+    margin: 0;
+    padding: 14px;
+    font-size: 12px;
+}
+
+.container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 14px;
+    border: 1px solid #d8e0e8;
+    border-radius: 6px;
+    box-shadow: 0 2px 3px #e5e9ed;
+}
+
+header {
+    text-align: center;
+    margin-bottom: 8px;
+}
+
+header h1 {
+    font-size: 20px;
+    margin: 0 0 4px;
+    color: #082b5b;
+}
+
+header p {
+    font-size: 10px;
+    margin: 0 0 8px;
+}
+
+.planner-section {
+    border: 1px solid #d5dce2;
+    margin-bottom: 8px;
+    padding: 0 8px 8px;
+}
+
+.planner-section h2 {
+    background-color: #ccecff;
+    font-size: 13px;
+    margin: 0 -8px 8px;
+    padding: 5px 7px;
+    color: #12345a;
+}
+
+ul,
+ol {
+    padding-left: 26px;
+    margin: 6px 0 8px;
+}
+
+li {
+    margin-bottom: 3px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 10px;
+}
+
+th,
+td {
+    border: 1px solid #cbd5df;
+    padding: 5px 7px;
+    text-align: left;
+}
+
+th {
+    background-color: #ccecff;
+    text-align: center;
+    font-weight: bold;
+}
+
+.checklist div {
+    margin: 5px 0;
+}
+
+.checklist input {
+    vertical-align: middle;
+    margin-right: 5px;
+    accent-color: #1683f8;
+}
+
+.checklist label {
+    cursor: pointer;
+}
+
+footer {
+    border-top: 1px solid #d5dce2;
+    text-align: center;
+    margin-top: 12px;
+    padding-top: 7px;
+    font-size: 10px;
+}
+
+footer p {
+    margin: 0;
+}
