@@ -1,0 +1,217 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <meta
+    name="description"
+    content="Découvrez Wiamore, une sélection élégante de bijoux et d'accessoires."
+  />
+
+  <title>Wiamore | Bijoux & Accessoires</title>
+
+  <link rel="stylesheet" href="style.css" />
+
+  <script src="data.js" defer></script>
+  <script src="app.js" defer></script>
+</head>
+
+<body>
+
+  <!-- HEADER -->
+  <header class="site-header">
+    <a href="#" class="brand-block" aria-label="Wiamore - Accueil">
+      <span class="brand-symbol" aria-hidden="true">✧</span>
+
+      <span class="brand-text">
+        <span class="brand-name">Wiamore</span>
+        <span class="brand-subtitle">BIJOUX & ACCESSOIRES</span>
+      </span>
+    </a>
+
+    <div class="header-search">
+      <label for="search-input">Rechercher</label>
+
+      <input
+        type="search"
+        id="search-input"
+        placeholder="Un collier, une bague..."
+        autocomplete="off"
+      />
+    </div>
+  </header>
+
+
+  <!-- BANNIÈRE PRINCIPALE -->
+  <section class="hero" aria-label="Découvrir Wiamore">
+
+    <div class="hero-content">
+      <span class="hero-eyebrow">
+        L'ÉLÉGANCE DANS LES DÉTAILS
+      </span>
+
+      <h1>
+        Chaque bijou raconte
+        <em>une histoire.</em>
+      </h1>
+
+      <p>
+        Des pièces délicates et intemporelles pour
+        sublimer votre style au quotidien.
+      </p>
+
+      <a href="#main-content" class="hero-button">
+        Découvrir la collection
+        <span aria-hidden="true">↗</span>
+      </a>
+
+      <span class="hero-note">
+        Élégance · Authenticité · Intemporalité
+      </span>
+    </div>
+
+    <div class="hero-visual">
+      <img
+        src="https://www.clicandfit.com/blog/wp-content/uploads/2024/02/accessoires-femmes-mariage.jpg"
+        alt="Bijou doré présenté dans un décor élégant"
+      />
+
+      <div class="hero-image-caption">
+        <span>LA SÉLECTION WIAMORE</span>
+        <span>NOS BIJOUX, VOTRE HISTOIRE</span>
+      </div>
+    </div>
+
+  </section>
+
+
+  <!-- FILTRES -->
+  <section class="controls" aria-label="Filtres du catalogue">
+
+    <div class="controls-heading">
+      <span class="eyebrow">NOTRE UNIVERS</span>
+      <h2>Une collection à découvrir.</h2>
+      <p>
+        Trouvez la pièce qui vous ressemble.
+      </p>
+    </div>
+
+    <div class="filters-row">
+
+      <div class="filter-group">
+        <label for="category-filter">Catégorie</label>
+
+        <select id="category-filter">
+          <option value="all">Toutes les catégories</option>
+          <option value="Colliers">Colliers</option>
+          <option value="Bracelets">Bracelets</option>
+          <option value="Bagues">Bagues</option>
+          <option value="Boucles d'oreilles">Boucles d'oreilles</option>
+          <option value="Accessoires">Accessoires</option>
+        </select>
+      </div>
+
+      <div class="filter-group">
+        <label for="sort-select">Trier par</label>
+
+        <select id="sort-select">
+          <option value="default">Ordre par défaut</option>
+          <option value="title-asc">Nom : A à Z</option>
+          <option value="title-desc">Nom : Z à A</option>
+          <option value="price-asc">Prix croissant</option>
+          <option value="price-desc">Prix décroissant</option>
+        </select>
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- CATALOGUE -->
+  <main id="main-content">
+
+    <div class="collection-heading">
+      <div>
+        <span class="eyebrow">LES INCONTOURNABLES</span>
+        <h2>Notre collection</h2>
+        <p>Des pièces délicates pour révéler votre style.</p>
+      </div>
+    </div>
+
+    <!-- Les cartes sont générées par app.js -->
+    <div
+      id="cards-grid"
+      class="cards-grid"
+      aria-live="polite"
+    ></div>
+
+    <!-- Aucun résultat -->
+    <div id="empty-state" class="empty-state" hidden>
+      <span class="empty-symbol" aria-hidden="true">✧</span>
+      <h2>Aucun bijou trouvé</h2>
+      <p>
+        Essayez un autre mot-clé ou choisissez une autre catégorie.
+      </p>
+
+      <button type="button" id="reset-filters">
+        Réinitialiser les filtres
+      </button>
+    </div>
+
+  </main>
+
+
+  <!-- FENÊTRE MODALE DES PRODUITS -->
+  <dialog id="product-modal" aria-labelledby="modal-title">
+
+    <div class="modal-inner">
+
+      <button
+        type="button"
+        id="close-modal"
+        class="modal-close"
+        aria-label="Fermer les détails"
+      >
+        &times;
+      </button>
+
+      <div class="modal-image-wrapper">
+        <img id="modal-image" src="" alt="" />
+      </div>
+
+      <div class="modal-info">
+        <span id="modal-category"></span>
+
+        <h2 id="modal-title"></h2>
+
+        <p id="modal-description"></p>
+
+        <div class="modal-divider"></div>
+
+        <p id="modal-details"></p>
+
+        <p id="modal-price" class="modal-price"></p>
+      </div>
+
+    </div>
+  </dialog>
+
+
+  <!-- FOOTER -->
+  <footer class="site-footer">
+    <a href="#" class="footer-brand">Wiamore</a>
+
+    <p>Bijoux & accessoires choisis avec soin.</p>
+
+    <span class="footer-copyright">
+      © 2026 Wiamore — Tous droits réservés.
+    </span>
+  </footer>
+
+</body>
+</html>
+
+
+

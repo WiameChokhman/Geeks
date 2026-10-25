@@ -1,0 +1,1309 @@
+
+/* ==========================================
+   WIAMORE — DESIGN SYSTEM
+   Bijoux & accessoires
+========================================== */
+
+:root {
+  --ivory: #faf7f2;
+  --white: #ffffff;
+  --cream: #f0e4d7;
+  --brown: #4b332b;
+  --brown-light: #765b4e;
+  --gold: #a77c4f;
+  --gold-light: #d9bd9a;
+  --text: #372e29;
+  --muted: #887a70;
+  --border: #e8ddd1;
+
+  --serif: Georgia, "Times New Roman", serif;
+  --sans: "Trebuchet MS", Arial, sans-serif;
+
+  --page-width: 1240px;
+  --radius: 12px;
+  --transition: 250ms ease;
+}
+
+
+/* ==========================================
+   1. RESET
+========================================== */
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 25px;
+}
+
+body {
+  margin: 0;
+  color: var(--text);
+  background: var(--ivory);
+
+  font-family: var(--sans);
+  font-size: 14px;
+  line-height: 1.7;
+
+  -webkit-font-smoothing: antialiased;
+}
+
+button,
+input,
+select {
+  font: inherit;
+}
+
+button,
+select {
+  cursor: pointer;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+h1,
+h2,
+h3,
+p {
+  margin-top: 0;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--serif);
+  font-weight: 400;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+a:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 4px;
+}
+
+
+/* ==========================================
+   2. HEADER
+========================================== */
+
+.site-header {
+  position: relative;
+  z-index: 2;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 25px;
+
+  padding: 17px max(24px, calc((100% - var(--page-width)) / 2));
+
+  background: var(--white);
+  border-bottom: 1px solid var(--border);
+}
+
+/* Logo */
+
+.brand-block {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+
+  color: var(--brown);
+}
+
+.brand-symbol {
+  align-self: flex-start;
+  margin-top: 2px;
+
+  color: var(--gold);
+  font-family: var(--serif);
+  font-size: 27px;
+  line-height: 1;
+}
+
+.brand-text {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.brand-name {
+  color: var(--brown);
+  font-family: var(--serif);
+  font-size: 32px;
+  font-weight: 400;
+  letter-spacing: 1.5px;
+  line-height: 1.15;
+}
+
+.brand-subtitle {
+  color: var(--muted);
+  font-size: 9px;
+  letter-spacing: 2px;
+}
+
+/* Recherche */
+
+.header-search {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+}
+
+.header-search label {
+  color: var(--brown-light);
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+#search-input {
+  width: 275px;
+  max-width: 100%;
+  padding: 12px 17px;
+
+  color: var(--text);
+  background: var(--ivory);
+
+  border: 1px solid var(--border);
+  border-radius: 30px;
+
+  font-size: 12px;
+
+  transition:
+    border-color var(--transition),
+    background var(--transition),
+    box-shadow var(--transition);
+}
+
+#search-input::placeholder {
+  color: #a69a90;
+}
+
+#search-input:hover {
+  border-color: var(--gold-light);
+}
+
+#search-input:focus {
+  outline: none;
+  background: var(--white);
+  border-color: var(--gold);
+  box-shadow: 0 0 0 3px rgba(167, 124, 79, 0.09);
+}
+
+
+/* ==========================================
+   3. HERO / BANNIÈRE
+========================================== */
+
+.hero {
+  display: grid;
+  grid-template-columns: 0.95fr 1.05fr;
+  align-items: stretch;
+  gap: 20px;
+
+  width: min(var(--page-width), calc(100% - 48px));
+  min-height: 410px;
+  margin: 30px auto 0;
+
+  overflow: hidden;
+
+  background: #f1e6d9;
+  border-radius: 14px;
+}
+
+/* Texte */
+
+.hero-content {
+  align-self: center;
+  padding: 40px 10px 40px 45px;
+
+  animation: heroTextIn 750ms ease both;
+}
+
+.hero-eyebrow,
+.eyebrow {
+  display: block;
+  margin-bottom: 11px;
+
+  color: var(--gold);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 2px;
+}
+
+.hero-content h1 {
+  margin-bottom: 17px;
+
+  color: var(--brown);
+  font-size: clamp(35px, 3.5vw, 49px);
+  font-weight: 400;
+  line-height: 1.16;
+}
+
+.hero-content h1 em {
+  display: block;
+  color: var(--gold);
+  font-weight: 400;
+}
+
+.hero-content > p {
+  max-width: 340px;
+  margin-bottom: 24px;
+
+  color: var(--brown-light);
+  font-size: 13px;
+  line-height: 1.9;
+}
+
+/* Bouton du hero */
+
+.hero-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+
+  padding: 13px 19px;
+
+  color: var(--white);
+  background: var(--brown);
+  border: 1px solid var(--brown);
+  border-radius: 5px;
+
+  font-size: 12px;
+
+  transition:
+    background var(--transition),
+    border-color var(--transition),
+    transform var(--transition);
+}
+
+.hero-button:hover {
+  background: var(--gold);
+  border-color: var(--gold);
+  transform: translateY(-2px);
+}
+
+.hero-button span {
+  font-size: 16px;
+}
+
+.hero-note {
+  display: block;
+  margin-top: 22px;
+
+  color: var(--muted);
+  font-size: 10px;
+  letter-spacing: 0.3px;
+}
+
+/* Image de la bannière */
+
+.hero-visual {
+  position: relative;
+  min-width: 0;
+  min-height: 410px;
+  overflow: hidden;
+}
+
+.hero-visual img {
+  width: 100%;
+  height: 100%;
+  min-height: 410px;
+
+  object-fit: cover;
+  object-position: center;
+
+  animation: heroImageIn 1s ease both;
+  transition: transform 700ms ease;
+}
+
+.hero-visual:hover img {
+  transform: scale(1.04);
+}
+
+/* Légende sur la photo */
+
+.hero-image-caption {
+  position: absolute;
+  right: 18px;
+  bottom: 18px;
+  left: 18px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+
+  padding: 13px 16px;
+
+  color: var(--white);
+  background: rgba(55, 39, 31, 0.65);
+  backdrop-filter: blur(5px);
+}
+
+.hero-image-caption span:first-child {
+  font-size: 9px;
+  letter-spacing: 1.8px;
+}
+
+.hero-image-caption span:last-child {
+  font-family: var(--serif);
+  font-size: 18px;
+}
+
+
+/* ==========================================
+   4. ANIMATIONS
+========================================== */
+
+@keyframes heroTextIn {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes heroImageIn {
+  from {
+    opacity: 0.6;
+    transform: scale(1.035);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+
+/* ==========================================
+   5. FILTRES
+========================================== */
+
+.controls {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 22px;
+
+  width: min(var(--page-width), calc(100% - 48px));
+  margin: 0 auto;
+  padding: 42px 0 25px;
+
+  background: transparent;
+  border: 0;
+}
+
+.controls-heading {
+  max-width: 650px;
+}
+
+.controls-heading .eyebrow {
+  margin-bottom: 8px;
+}
+
+.controls-heading h2 {
+  margin-bottom: 6px;
+
+  color: var(--brown);
+  font-size: clamp(27px, 3vw, 36px);
+  line-height: 1.25;
+}
+
+.controls-heading p {
+  margin-bottom: 0;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+/* Panneau des filtres */
+
+.filters-row {
+  display: flex;
+  align-items: end;
+  flex-wrap: wrap;
+  gap: 17px;
+
+  padding: 17px;
+
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.filter-group {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 6px;
+
+  min-width: 180px;
+}
+
+.filter-group label {
+  color: var(--brown-light);
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.filter-group select {
+  width: 100%;
+  min-height: 42px;
+  padding: 0 13px;
+
+  color: var(--brown);
+  background: var(--ivory);
+
+  border: 1px solid var(--border);
+  border-radius: 6px;
+
+  font-size: 12px;
+
+  transition: border-color var(--transition);
+}
+
+.filter-group select:hover,
+.filter-group select:focus {
+  border-color: var(--gold-light);
+}
+
+.filter-group select:focus {
+  outline: none;
+}
+
+
+/* ==========================================
+   6. CATALOGUE
+========================================== */
+
+#main-content {
+  width: min(var(--page-width), calc(100% - 48px));
+  margin: 0 auto;
+  padding: 10px 0 65px;
+}
+
+.collection-heading {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 20px;
+
+  margin-bottom: 23px;
+}
+
+.collection-heading .eyebrow {
+  margin-bottom: 7px;
+}
+
+.collection-heading h2 {
+  margin-bottom: 5px;
+
+  color: var(--brown);
+  font-size: 30px;
+}
+
+.collection-heading p {
+  margin-bottom: 0;
+
+  color: var(--muted);
+  font-size: 13px;
+}
+
+
+/* ==========================================
+   7. GRILLE
+========================================== */
+
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  align-items: stretch;
+  gap: 21px;
+}
+
+
+/* ==========================================
+   8. CARTES PRODUITS
+========================================== */
+
+.product-card {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  overflow: hidden;
+
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+
+  box-shadow: 0 3px 12px rgba(75, 51, 43, 0.025);
+
+  transition:
+    transform var(--transition),
+    box-shadow var(--transition),
+    border-color var(--transition);
+}
+
+.product-card:hover {
+  transform: translateY(-4px);
+  border-color: #dbc5ad;
+  box-shadow: 0 12px 26px rgba(75, 51, 43, 0.09);
+}
+
+/* Image */
+
+.product-image-container {
+  position: relative;
+  overflow: hidden;
+
+  margin: 9px 9px 0;
+  aspect-ratio: 1 / 1;
+
+  background: var(--cream);
+  border-radius: 7px;
+}
+
+.product-image {
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+
+  transition: transform 500ms ease;
+}
+
+.product-card:hover .product-image {
+  transform: scale(1.045);
+}
+
+/* Badge */
+
+.product-badge {
+  position: absolute;
+  top: 11px;
+  left: 11px;
+
+  max-width: calc(100% - 22px);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+
+  padding: 5px 10px;
+
+  color: var(--brown);
+  background: rgba(255, 255, 255, 0.94);
+  border-radius: 30px;
+
+  font-size: 10px;
+  line-height: 1.5;
+}
+
+/* Informations */
+
+.product-info {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+
+  padding: 15px 15px 16px;
+}
+
+.product-category {
+  margin-bottom: 5px;
+
+  color: var(--gold);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 1.1px;
+  text-transform: uppercase;
+}
+
+.product-title {
+  margin-bottom: 7px;
+
+  color: var(--brown);
+  font-size: 19px;
+  line-height: 1.35;
+}
+
+.product-description {
+  margin-bottom: 17px;
+
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.75;
+}
+
+/* Prix et bouton */
+
+.product-footer {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 11px;
+
+  margin-top: auto;
+}
+
+.product-price {
+  color: var(--gold);
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.details-button {
+  width: 100%;
+  min-height: 39px;
+  padding: 9px 12px;
+
+  color: var(--white);
+  background: var(--brown);
+
+  border: 1px solid var(--brown);
+  border-radius: 5px;
+
+  font-size: 12px;
+
+  transition:
+    background var(--transition),
+    border-color var(--transition);
+}
+
+.details-button:hover {
+  background: var(--gold);
+  border-color: var(--gold);
+}
+
+
+/* ==========================================
+   9. AUCUN RÉSULTAT
+========================================== */
+
+.empty-state {
+  padding: 48px 20px;
+
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+
+  text-align: center;
+}
+
+.empty-state[hidden] {
+  display: none;
+}
+
+.empty-symbol {
+  display: block;
+  margin-bottom: 10px;
+
+  color: var(--gold);
+  font-size: 30px;
+}
+
+.empty-state h2 {
+  margin-bottom: 8px;
+  color: var(--brown);
+  font-size: 27px;
+}
+
+.empty-state p {
+  color: var(--muted);
+  font-size: 13px;
+}
+
+#reset-filters {
+  padding: 11px 19px;
+
+  color: var(--brown);
+  background: var(--white);
+
+  border: 1px solid var(--gold-light);
+  border-radius: 5px;
+
+  font-size: 12px;
+
+  transition:
+    color var(--transition),
+    background var(--transition);
+}
+
+#reset-filters:hover {
+  color: var(--white);
+  background: var(--brown);
+}
+
+
+/* ==========================================
+   10. MODALE PRODUIT
+========================================== */
+
+#product-modal {
+  position: fixed;
+
+  width: min(850px, calc(100% - 32px));
+  max-width: 850px;
+  max-height: 88vh;
+  overflow-y: auto;
+
+  padding: 0;
+
+  color: var(--text);
+  background: var(--white);
+
+  border: 1px solid var(--border);
+  border-radius: 13px;
+
+  box-shadow: 0 25px 80px rgba(40, 28, 22, 0.22);
+}
+
+#product-modal::backdrop {
+  background: rgba(40, 29, 24, 0.68);
+  backdrop-filter: blur(4px);
+}
+
+.modal-inner {
+  position: relative;
+
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 27px;
+
+  padding: 28px;
+}
+
+.modal-close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 1;
+
+  display: grid;
+  place-items: center;
+
+  width: 36px;
+  height: 36px;
+
+  color: var(--brown);
+  background: var(--white);
+
+  border: 1px solid var(--border);
+  border-radius: 50%;
+
+  font-size: 24px;
+  line-height: 1;
+
+  transition:
+    color var(--transition),
+    background var(--transition);
+}
+
+.modal-close:hover {
+  color: var(--white);
+  background: var(--brown);
+}
+
+.modal-image-wrapper {
+  min-width: 0;
+  align-self: start;
+  overflow: hidden;
+
+  background: var(--ivory);
+  border-radius: 8px;
+}
+
+#modal-image {
+  width: 100%;
+  max-height: 440px;
+  aspect-ratio: 4 / 5;
+
+  object-fit: contain;
+}
+
+.modal-info {
+  align-self: center;
+  min-width: 0;
+  padding: 15px 0;
+}
+
+#modal-category {
+  display: block;
+  margin-bottom: 8px;
+
+  color: var(--gold);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 1.4px;
+  text-transform: uppercase;
+}
+
+#modal-title {
+  margin-bottom: 13px;
+
+  color: var(--brown);
+  font-size: 30px;
+  line-height: 1.25;
+  overflow-wrap: anywhere;
+}
+
+#modal-description,
+#modal-details {
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.9;
+  overflow-wrap: anywhere;
+}
+
+.modal-divider {
+  height: 1px;
+  margin: 20px 0;
+
+  background: var(--border);
+}
+
+#modal-price {
+  margin: 22px 0 0;
+
+  color: var(--gold);
+  font-size: 21px;
+  font-weight: 600;
+}
+
+
+/* ==========================================
+   11. FOOTER
+========================================== */
+
+.site-footer {
+  padding: 29px 20px;
+
+  background: #f2e9df;
+  border-top: 1px solid var(--border);
+
+  text-align: center;
+}
+
+.footer-brand {
+  display: inline-block;
+  margin-bottom: 5px;
+
+  color: var(--brown);
+  font-family: var(--serif);
+  font-size: 25px;
+  letter-spacing: 1px;
+}
+
+.site-footer p {
+  margin-bottom: 12px;
+
+  color: var(--brown-light);
+  font-size: 12px;
+}
+
+.footer-copyright {
+  color: var(--muted);
+  font-size: 10px;
+}
+
+
+/* ==========================================
+   12. TABLETTES
+========================================== */
+
+@media (max-width: 1000px) {
+  .cards-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 17px;
+  }
+
+  .hero {
+    gap: 10px;
+  }
+
+  .hero-content {
+    padding-left: 28px;
+  }
+
+  .hero-content h1 {
+    font-size: 38px;
+  }
+
+  .header-search label {
+    display: none;
+  }
+}
+
+
+/* ==========================================
+   13. MOBILES
+========================================== */
+
+@media (max-width: 700px) {
+  .site-header {
+    flex-wrap: wrap;
+    gap: 15px;
+    padding: 16px 20px;
+  }
+
+  .brand-name {
+    font-size: 29px;
+  }
+
+  .brand-symbol {
+    font-size: 24px;
+  }
+
+  .brand-subtitle {
+    font-size: 8px;
+  }
+
+  .header-search {
+    width: 100%;
+  }
+
+  #search-input {
+    width: 100%;
+  }
+
+  .hero {
+    grid-template-columns: 1fr;
+    gap: 0;
+
+    width: calc(100% - 32px);
+    min-height: 0;
+    margin-top: 18px;
+  }
+
+  .hero-content {
+    padding: 33px 25px 27px;
+  }
+
+  .hero-content h1 {
+    font-size: 37px;
+  }
+
+  .hero-content > p {
+    max-width: 400px;
+  }
+
+  .hero-note {
+    margin-top: 17px;
+  }
+
+  .hero-visual {
+    min-height: 0;
+    height: 280px;
+  }
+
+  .hero-visual img {
+    min-height: 0;
+    height: 100%;
+  }
+
+  .controls,
+  #main-content {
+    width: calc(100% - 32px);
+  }
+
+  .controls {
+    gap: 18px;
+    padding-top: 32px;
+  }
+
+  .controls-heading h2 {
+    font-size: 29px;
+  }
+
+  .filters-row {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 13px;
+    padding: 14px;
+  }
+
+  .filter-group {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .collection-heading h2 {
+    font-size: 27px;
+  }
+
+  .cards-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+
+  .product-image-container {
+    margin: 6px 6px 0;
+  }
+
+  .product-info {
+    padding: 11px;
+  }
+
+  .product-title {
+    font-size: 16px;
+  }
+
+  .product-description {
+    font-size: 11px;
+  }
+
+  .product-price {
+    font-size: 13px;
+  }
+
+  .product-footer {
+    gap: 9px;
+  }
+
+  .details-button {
+    min-height: 37px;
+    padding: 8px 6px;
+    font-size: 11px;
+  }
+
+  .product-badge {
+    top: 7px;
+    left: 7px;
+    padding: 4px 7px;
+    font-size: 9px;
+  }
+
+  .modal-inner {
+    grid-template-columns: 1fr;
+    gap: 17px;
+    padding: 18px;
+  }
+
+  #modal-image {
+    max-height: 280px;
+    aspect-ratio: 4 / 3;
+  }
+
+  .modal-info {
+    padding: 0 2px 5px;
+  }
+
+  #modal-title {
+    font-size: 26px;
+  }
+}
+
+
+/* ==========================================
+   14. TRÈS PETITS ÉCRANS
+========================================== */
+
+@media (max-width: 380px) {
+  .brand-name {
+    font-size: 26px;
+  }
+
+  .hero-content h1 {
+    font-size: 32px;
+  }
+
+  .cards-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .product-image-container {
+    aspect-ratio: 5 / 4;
+  }
+
+  .product-title {
+    font-size: 19px;
+  }
+
+  .product-description {
+    font-size: 12px;
+  }
+
+  .collection-heading h2 {
+    font-size: 25px;
+  }
+}
+
+
+/* ==========================================
+   15. ACCESSIBILITÉ
+========================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ==========================================
+   AJUSTEMENT — ESPACEMENTS PLUS ÉLÉGANTS
+========================================== */
+
+/* Bannière : moins de vide en dessous */
+.hero {
+  min-height: 340px;
+  margin-top: 18px;
+}
+
+.hero-content {
+  padding: 30px 10px 30px 36px;
+}
+
+.hero-visual,
+.hero-visual img {
+  min-height: 340px;
+}
+
+/* Section des filtres : rapprochée de la bannière */
+.controls {
+  gap: 16px;
+  padding-top: 27px;
+  padding-bottom: 18px;
+}
+
+.controls-heading .eyebrow {
+  margin-bottom: 5px;
+}
+
+.controls-heading h2 {
+  margin-bottom: 3px;
+  font-size: 30px;
+}
+
+.controls-heading p {
+  font-size: 12px;
+}
+
+/* Filtres : panneau plus compact */
+.filters-row {
+  gap: 14px;
+  padding: 13px 15px;
+}
+
+.filter-group {
+  gap: 4px;
+}
+
+.filter-group select {
+  min-height: 38px;
+}
+
+/* Collection : moins d'espace avant les cartes */
+#main-content {
+  padding-top: 5px;
+  padding-bottom: 45px;
+}
+
+.collection-heading {
+  margin-bottom: 17px;
+}
+
+.collection-heading .eyebrow {
+  margin-bottom: 4px;
+}
+
+.collection-heading h2 {
+  margin-bottom: 3px;
+  font-size: 27px;
+}
+
+.collection-heading p {
+  font-size: 12px;
+}
+
+/* Grille : espacement plus fin */
+.cards-grid {
+  gap: 18px;
+}
+
+/* Cartes légèrement plus compactes */
+.product-image-container {
+  margin: 7px 7px 0;
+}
+
+.product-info {
+  padding: 12px 13px 14px;
+}
+
+.product-title {
+  font-size: 18px;
+}
+
+.product-description {
+  margin-bottom: 12px;
+}
+
+/* Mobile : garder une mise en page aérée sans excès */
+@media (max-width: 700px) {
+  .hero {
+    margin-top: 14px;
+  }
+
+  .hero-content {
+    padding: 27px 22px 23px;
+  }
+
+  .hero-visual,
+  .hero-visual img {
+    min-height: 250px;
+    height: 250px;
+  }
+
+  .controls {
+    padding-top: 24px;
+    padding-bottom: 14px;
+  }
+
+  .controls-heading h2 {
+    font-size: 27px;
+  }
+
+  .filters-row {
+    padding: 12px;
+    gap: 11px;
+  }
+
+  #main-content {
+    padding-top: 4px;
+  }
+
+  .collection-heading {
+    margin-bottom: 14px;
+  }
+
+  .cards-grid {
+    gap: 12px;
+  }
+}
+
+
+
