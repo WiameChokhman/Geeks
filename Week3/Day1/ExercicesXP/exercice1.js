@@ -1,0 +1,21 @@
+function displayNumbersDivisible(divisor) {
+    let sum = 0;
+
+    for (let i = 0; i <= 500; i++) {
+        if (i % divisor === 0) {
+            console.log(i);
+            sum += i;
+        }
+    }
+
+    console.log("Sum : " + sum);
+}
+
+const divisor = Number(prompt("Tapez le diviseur :"));
+
+if (Number.isInteger(divisor)) {
+    displayNumbersDivisible(divisor);
+} else {
+    console.log("Veuillez entrer un nombre entier.");
+}
+
