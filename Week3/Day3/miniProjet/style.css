@@ -1307,3 +1307,126 @@ a:focus-visible {
 
 
 
+
+
+/* ==========================================
+   14. AJOUT D'ARTICLE — ACTION & FORMULAIRE
+========================================== */
+.catalog-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 14px;
+}
+
+.catalog-toolbar-hint {
+  margin: 0;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.primary-action,
+.secondary-action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 11px 17px;
+  border: 1px solid transparent;
+  border-radius: 7px;
+  font-weight: 600;
+  font-size: 12px;
+  transition: transform var(--transition), background var(--transition), box-shadow var(--transition), border-color var(--transition);
+}
+
+.primary-action {
+  color: var(--white);
+  background: var(--brown);
+  border-color: var(--brown);
+  box-shadow: 0 4px 12px rgba(75, 51, 43, 0.12);
+}
+
+.primary-action:hover {
+  background: var(--gold);
+  border-color: var(--gold);
+  transform: translateY(-1px);
+  box-shadow: 0 7px 16px rgba(75, 51, 43, 0.15);
+}
+
+.primary-action span { font-size: 18px; line-height: 1; }
+
+.secondary-action {
+  color: var(--brown);
+  background: var(--white);
+  border-color: var(--border);
+}
+.secondary-action:hover { background: var(--ivory); border-color: var(--gold-light); }
+
+.form-modal {
+  width: min(680px, calc(100% - 28px));
+  max-width: 680px;
+  max-height: min(90vh, 860px);
+  padding: 0;
+  overflow: auto;
+  color: var(--text);
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  box-shadow: 0 24px 80px rgba(42, 29, 23, 0.24);
+}
+
+.form-modal[open] { animation: addModalIn 220ms ease-out both; }
+.form-modal::backdrop { background: rgba(39, 28, 23, 0.58); backdrop-filter: blur(3px); }
+.form-modal-inner { padding: clamp(20px, 4vw, 34px); }
+.form-modal-heading { display: flex; align-items: flex-start; justify-content: space-between; gap: 20px; padding-bottom: 20px; border-bottom: 1px solid var(--border); }
+.form-modal-heading .eyebrow { margin-bottom: 5px; }
+.form-modal-heading h2 { margin: 0 0 5px; color: var(--brown); font-size: clamp(25px, 4vw, 32px); }
+.form-modal-heading p { margin: 0; color: var(--muted); font-size: 12px; }
+.form-modal .modal-close { position: static; flex: 0 0 38px; }
+
+.add-item-form { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 17px; padding-top: 22px; }
+.form-field { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.form-field-wide { grid-column: 1 / -1; }
+.form-field label { color: var(--brown-light); font-size: 12px; font-weight: 600; }
+.form-field label span { color: #a44835; }
+.form-field input,
+.form-field select,
+.form-field textarea {
+  width: 100%; min-height: 44px; padding: 11px 12px;
+  color: var(--text); background: var(--ivory);
+  border: 1px solid var(--border); border-radius: 7px;
+  font: inherit; font-size: 13px;
+  transition: border-color var(--transition), box-shadow var(--transition), background var(--transition);
+}
+.form-field textarea { min-height: 78px; resize: vertical; }
+.form-field input:focus,
+.form-field select:focus,
+.form-field textarea:focus { outline: none; background: var(--white); border-color: var(--gold); box-shadow: 0 0 0 3px rgba(167, 124, 79, 0.12); }
+.form-field [aria-invalid="true"] { border-color: #b34a3c; }
+.field-error { min-height: 0; color: #a33e32; font-size: 11px; line-height: 1.4; }
+.field-error:empty { display: none; }
+.form-feedback { grid-column: 1 / -1; margin: 0; color: #a33e32; font-size: 12px; }
+.form-feedback:empty { display: none; }
+.form-actions { grid-column: 1 / -1; display: flex; justify-content: flex-end; flex-wrap: wrap; gap: 10px; padding-top: 4px; }
+
+@keyframes addModalIn {
+  from { opacity: 0; transform: translateY(8px) scale(0.99); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@media (max-width: 600px) {
+  .catalog-toolbar { align-items: stretch; }
+  .catalog-toolbar .primary-action { width: 100%; }
+  .add-item-form { grid-template-columns: minmax(0, 1fr); }
+  .form-field-wide, .form-feedback, .form-actions { grid-column: 1; }
+  .form-actions > button { flex: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .form-modal[open] { animation: none; }
+  .primary-action, .secondary-action { transition: none; }
+}
+
+

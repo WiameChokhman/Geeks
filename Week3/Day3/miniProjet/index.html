@@ -95,6 +95,13 @@
       </p>
     </div>
 
+    <div class="catalog-toolbar">
+      <p class="catalog-toolbar-hint">Gérez votre collection en quelques clics.</p>
+      <button type="button" id="open-add-item" class="primary-action">
+        <span aria-hidden="true">＋</span> Ajouter un article
+      </button>
+    </div>
+
     <div class="filters-row">
 
       <div class="filter-group">
@@ -126,6 +133,7 @@
   </section>
 
 
+  
   <!-- CATALOGUE -->
   <main id="main-content">
 
@@ -187,6 +195,72 @@
     </div>
   </dialog>
 
+
+  <!-- FORMULAIRE D'AJOUT : fermé et invisible au chargement -->
+  <dialog id="add-item-modal" class="form-modal" aria-labelledby="add-item-title">
+    <div class="form-modal-inner">
+      <div class="form-modal-heading">
+        <div>
+          <span class="eyebrow">VOTRE COLLECTION</span>
+          <h2 id="add-item-title">Ajouter un article</h2>
+          <p>Complétez les informations de cette nouvelle pièce.</p>
+        </div>
+        <button type="button" id="close-add-item" class="modal-close" aria-label="Fermer le formulaire">&times;</button>
+      </div>
+
+      <form id="add-item-form" class="add-item-form">
+        <div class="form-field">
+          <label for="item-title">Nom de l’article <span aria-hidden="true">*</span></label>
+          <input id="item-title" name="title" type="text" maxlength="100" required autocomplete="off" placeholder="Ex. Collier Golden Glow" />
+          <small class="field-error" id="title-error"></small>
+        </div>
+
+        <div class="form-field">
+          <label for="item-category">Catégorie <span aria-hidden="true">*</span></label>
+          <select id="item-category" name="category" required>
+            <option value="" selected disabled>Choisir une catégorie</option>
+            <option value="Colliers">Colliers</option>
+            <option value="Bracelets">Bracelets</option>
+            <option value="Bagues">Bagues</option>
+            <option value="Boucles d'oreilles">Boucles d'oreilles</option>
+            <option value="Accessoires">Accessoires</option>
+          </select>
+          <small class="field-error" id="category-error"></small>
+        </div>
+
+        <div class="form-field">
+          <label for="item-price">Prix (MAD) <span aria-hidden="true">*</span></label>
+          <input id="item-price" name="price" type="number" min="0.01" max="10000000" step="0.01" required inputmode="decimal" placeholder="Ex. 350" />
+          <small class="field-error" id="price-error"></small>
+        </div>
+
+        <div class="form-field">
+          <label for="item-image">URL de l’image <span aria-hidden="true">*</span></label>
+          <input id="item-image" name="image" type="url" required maxlength="2048" placeholder="https://exemple.com/image.jpg" />
+          <small class="field-error" id="image-error"></small>
+        </div>
+
+        <div class="form-field form-field-wide">
+          <label for="item-short-description">Description courte <span aria-hidden="true">*</span></label>
+          <textarea id="item-short-description" name="shortDescription" rows="2" maxlength="220" required placeholder="Une phrase pour présenter l’article."></textarea>
+          <small class="field-error" id="shortDescription-error"></small>
+        </div>
+
+        <div class="form-field form-field-wide">
+          <label for="item-full-details">Description détaillée <span aria-hidden="true">*</span></label>
+          <textarea id="item-full-details" name="fullDetails" rows="3" maxlength="1200" required placeholder="Décrivez les matériaux, le style ou les détails de l’article."></textarea>
+          <small class="field-error" id="fullDetails-error"></small>
+        </div>
+
+        <p id="add-item-feedback" class="form-feedback" role="status" aria-live="polite"></p>
+
+        <div class="form-actions">
+          <button type="button" id="cancel-add-item" class="secondary-action">Annuler</button>
+          <button type="submit" class="primary-action">Ajouter au catalogue</button>
+        </div>
+      </form>
+    </div>
+  </dialog>
 
   <!-- FOOTER -->
   <footer class="site-footer">
