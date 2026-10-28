@@ -33,13 +33,18 @@
 
     <div class="header-search">
       <label for="search-input">Rechercher</label>
-
       <input
         type="search"
         id="search-input"
         placeholder="Un collier, une bague..."
         autocomplete="off"
       />
+    </div>
+
+    <div class="header-actions" aria-label="Préférences d’affichage">
+      <button type="button" id="theme-toggle" class="icon-action" aria-label="Activer le thème sombre" aria-pressed="false">
+        <span id="theme-icon" aria-hidden="true">☾</span>
+      </button>
     </div>
   </header>
 
@@ -104,6 +109,10 @@
 
     <div class="filters-row">
 
+      <button type="button" id="favorites-filter" class="favorites-filter" aria-pressed="false">
+        <span aria-hidden="true">♡</span> Favoris <span id="favorites-count" class="favorites-count">0</span>
+      </button>
+
       <div class="filter-group">
         <label for="category-filter">Catégorie</label>
 
@@ -147,8 +156,8 @@
     <!-- Aucun résultat -->
     <div id="empty-state" class="empty-state" hidden>
       <span class="empty-symbol" aria-hidden="true">✧</span>
-      <h2>Aucun bijou trouvé</h2>
-      <p>
+      <h2 id="empty-state-title">Aucun bijou trouvé</h2>
+      <p id="empty-state-description">
         Essayez un autre mot-clé ou choisissez une autre catégorie.
       </p>
 
@@ -275,6 +284,7 @@
 
 </body>
 </html>
+
 
 
 

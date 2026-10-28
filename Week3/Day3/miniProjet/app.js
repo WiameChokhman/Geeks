@@ -1,15 +1,22 @@
+/* =========================================================
+   WIAMORE — Catalogue, thème, favoris et ajout d'articles
+   JavaScript Vanilla, sans dépendances externes.
+========================================================= */
 
-//RÉCUPÉRER LES ÉLÉMENTS HTML
-
-// Grille et contrôles
+// --- Références DOM ---------------------------------------------------------
 const cardsGrid = document.getElementById("cards-grid");
 const searchInput = document.getElementById("search-input");
 const categoryFilter = document.getElementById("category-filter");
 const sortSelect = document.getElementById("sort-select");
 const emptyState = document.getElementById("empty-state");
+const emptyStateTitle = document.getElementById("empty-state-title");
+const emptyStateDescription = document.getElementById("empty-state-description");
 const resetButton = document.getElementById("reset-filters");
+const favoritesFilterButton = document.getElementById("favorites-filter");
+const favoritesCount = document.getElementById("favorites-count");
+const themeToggle = document.getElementById("theme-toggle");
+const themeIcon = document.getElementById("theme-icon");
 
-// Éléments de la fenêtre modale
 const modal = document.getElementById("product-modal");
 const modalImage = document.getElementById("modal-image");
 const modalTitle = document.getElementById("modal-title");
@@ -19,7 +26,6 @@ const modalDetails = document.getElementById("modal-details");
 const modalPrice = document.getElementById("modal-price");
 const closeModalButton = document.getElementById("close-modal");
 
-// Formulaire d'ajout d'article
 const addItemModal = document.getElementById("add-item-modal");
 const openAddItemButton = document.getElementById("open-add-item");
 const closeAddItemButton = document.getElementById("close-add-item");
@@ -34,226 +40,279 @@ const addItemFields = {
   shortDescription: document.getElementById("item-short-description"),
   fullDetails: document.getElementById("item-full-details")
 };
-const STORAGE_KEY = "wiamore-added-catalog-items-v1";
+
+// --- Clés de stockage -------------------------------------------------------
+const STORAGE_KEYS = {
+  addedItems: "wiamore-added-catalog-items-v1",
+  favorites: "wiamore-favorites-v1",
+  theme: "wiamore-theme-v1"
+};
 const ORIGINAL_ITEM_IDS = new Set(catalogItems.map((item) => String(item.id)));
+let favorites = new Set(readStorageArray(STORAGE_KEYS.favorites).map(String));
+let favoritesOnly = false;
 
-// Restaurer uniquement les articles créés par l'utilisateur dans ce navigateur.
-// Le catalogue initial de data.js reste la source des produits de démonstration.
-function restoreAddedItems() {
+function readStorageArray(key) {
   try {
-    const savedItems = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
-    if (!Array.isArray(savedItems)) return;
-
-    const existingIds = new Set(catalogItems.map((item) => String(item.id)));
-    savedItems.forEach((item) => {
-      if (item && item.id != null && !existingIds.has(String(item.id)) &&
-          ["title", "category", "image", "metric", "shortDescription", "fullDetails"].every((key) => typeof item[key] === "string")) {
-        catalogItems.push(item);
-        existingIds.add(String(item.id));
-      }
-    });
+    const parsed = JSON.parse(localStorage.getItem(key) || "[]");
+    return Array.isArray(parsed) ? parsed : [];
   } catch (error) {
-    console.warn("Les articles enregistrés localement n'ont pas pu être restaurés.", error);
+    console.warn(`Impossible de lire ${key} depuis le stockage local.`, error);
+    return [];
   }
 }
 
+function safeSetStorage(key, value) {
+  try {
+    localStorage.setItem(key, value);
+    return true;
+  } catch (error) {
+    console.warn(`Impossible d'enregistrer ${key} dans le stockage local.`, error);
+    return false;
+  }
+}
+
+// --- Persistance des articles créés avec le formulaire ----------------------
+function restoreAddedItems() {
+  const savedItems = readStorageArray(STORAGE_KEYS.addedItems);
+  const existingIds = new Set(catalogItems.map((item) => String(item.id)));
+
+  savedItems.forEach((item) => {
+    const validShape = item && item.id != null &&
+      ["title", "category", "image", "metric", "shortDescription", "fullDetails"]
+        .every((key) => typeof item[key] === "string");
+    if (validShape && !existingIds.has(String(item.id))) {
+      catalogItems.push(item);
+      existingIds.add(String(item.id));
+    }
+  });
+}
+
 function persistAddedItems() {
-  // Ne persister que les articles ajoutés, pas les produits livrés dans data.js.
   const addedItems = catalogItems.filter((item) => !ORIGINAL_ITEM_IDS.has(String(item.id)));
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(addedItems));
+  return safeSetStorage(STORAGE_KEYS.addedItems, JSON.stringify(addedItems));
 }
 
 restoreAddedItems();
 
+// --- Thème clair / sombre ---------------------------------------------------
+function getInitialTheme() {
+  const savedTheme = (() => {
+    try { return localStorage.getItem(STORAGE_KEYS.theme); }
+    catch (_) { return null; }
+  })();
+  if (savedTheme === "light" || savedTheme === "dark") return savedTheme;
+  return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+}
 
-// AFFICHER LES CARTES DES PRODUITS
+function applyTheme(theme, persist = true) {
+  document.documentElement.dataset.theme = theme;
+  const darkMode = theme === "dark";
+  themeIcon.textContent = darkMode ? "☀" : "☾";
+  themeToggle.setAttribute("aria-pressed", String(darkMode));
+  themeToggle.setAttribute("aria-label", darkMode ? "Activer le thème clair" : "Activer le thème sombre");
+  if (persist) safeSetStorage(STORAGE_KEYS.theme, theme);
+}
 
-function renderItems(data) {
-  // Vider la grille avant de créer les nouvelles cartes
-  cardsGrid.innerHTML = "";
+applyTheme(getInitialTheme(), false);
+themeToggle.addEventListener("click", () => {
+  applyTheme(document.documentElement.dataset.theme === "dark" ? "light" : "dark");
+});
 
-  // Afficher un message si aucun produit ne correspond
-  if (data.length === 0) {
+// Si aucun choix n'a été enregistré, suivre les changements du thème système.
+const systemTheme = window.matchMedia("(prefers-color-scheme: dark)");
+systemTheme.addEventListener?.("change", (event) => {
+  let savedTheme = null;
+  try { savedTheme = localStorage.getItem(STORAGE_KEYS.theme); } catch (_) { /* stockage indisponible */ }
+  if (savedTheme !== "light" && savedTheme !== "dark") applyTheme(event.matches ? "dark" : "light", false);
+});
+
+// --- En-tête qui réagit au défilement ---------------------------------------
+const siteHeader = document.querySelector(".site-header");
+function updateHeaderOnScroll() {
+  siteHeader.classList.toggle("is-scrolled", window.scrollY > 8);
+}
+window.addEventListener("scroll", updateHeaderOnScroll, { passive: true });
+updateHeaderOnScroll();
+
+// --- Favoris ---------------------------------------------------------------
+function persistFavorites() {
+  safeSetStorage(STORAGE_KEYS.favorites, JSON.stringify([...favorites]));
+}
+
+function updateFavoritesControl() {
+  favoritesCount.textContent = String(favorites.size);
+  favoritesFilterButton.classList.toggle("is-active", favoritesOnly);
+  favoritesFilterButton.setAttribute("aria-pressed", String(favoritesOnly));
+  favoritesFilterButton.querySelector("span").textContent = favoritesOnly ? "♥" : "♡";
+}
+
+function toggleFavorite(itemId) {
+  const key = String(itemId);
+  if (favorites.has(key)) favorites.delete(key);
+  else favorites.add(key);
+  persistFavorites();
+  updateCatalog();
+}
+
+// --- Rendu des cartes -------------------------------------------------------
+function renderItems(items) {
+  cardsGrid.replaceChildren();
+
+  if (items.length === 0) {
     emptyState.hidden = false;
+    if (favoritesOnly) {
+      emptyStateTitle.textContent = "Aucun favori pour le moment";
+      emptyStateDescription.textContent = "Appuyez sur le cœur d’un article pour l’ajouter à vos favoris.";
+    } else {
+      emptyStateTitle.textContent = "Aucun bijou trouvé";
+      emptyStateDescription.textContent = "Essayez un autre mot-clé ou choisissez une autre catégorie.";
+    }
     return;
   }
 
   emptyState.hidden = true;
+  const fragment = document.createDocumentFragment();
 
-  // Créer une carte pour chaque produit
-  data.forEach((item) => {
+  items.forEach((item) => {
     const card = document.createElement("article");
-    card.classList.add("product-card");
+    card.className = "product-card";
 
-    // Conteneur de l'image
     const imageContainer = document.createElement("div");
-    imageContainer.classList.add("product-image-container");
+    imageContainer.className = "product-image-container";
 
     const image = document.createElement("img");
-    image.classList.add("product-image");
+    image.className = "product-image";
     image.src = item.image;
     image.alt = item.title;
-    // Charger l'image seulement quand elle approche de l'écran
     image.loading = "lazy";
+    image.addEventListener("error", () => {
+      image.classList.add("image-unavailable");
+      image.alt = `${item.title} — image indisponible`;
+    }, { once: true });
 
-    // Badge de catégorie
     const badge = document.createElement("span");
-    badge.classList.add("product-badge");
+    badge.className = "product-badge";
     badge.textContent = item.category;
 
-    imageContainer.append(image, badge);
+    const favoriteButton = document.createElement("button");
+    const isFavorite = favorites.has(String(item.id));
+    favoriteButton.type = "button";
+    favoriteButton.className = `favorite-button${isFavorite ? " is-favorite" : ""}`;
+    favoriteButton.textContent = isFavorite ? "♥" : "♡";
+    favoriteButton.setAttribute("aria-pressed", String(isFavorite));
+    favoriteButton.setAttribute("aria-label", isFavorite ? `Retirer ${item.title} des favoris` : `Ajouter ${item.title} aux favoris`);
+    favoriteButton.title = favoriteButton.getAttribute("aria-label");
+    favoriteButton.addEventListener("click", () => toggleFavorite(item.id));
 
-    // Informations du produit
+    imageContainer.append(image, badge, favoriteButton);
+
     const productInfo = document.createElement("div");
-    productInfo.classList.add("product-info");
-
+    productInfo.className = "product-info";
     const category = document.createElement("p");
-    category.classList.add("product-category");
+    category.className = "product-category";
     category.textContent = item.category;
-
     const title = document.createElement("h3");
-    title.classList.add("product-title");
+    title.className = "product-title";
     title.textContent = item.title;
-
     const description = document.createElement("p");
-    description.classList.add("product-description");
+    description.className = "product-description";
     description.textContent = item.shortDescription;
 
-    // Pied de carte : prix et bouton
     const footer = document.createElement("div");
-    footer.classList.add("product-footer");
-
+    footer.className = "product-footer";
     const price = document.createElement("span");
-    price.classList.add("product-price");
+    price.className = "product-price";
     price.textContent = item.metric;
-
     const detailsButton = document.createElement("button");
-    detailsButton.classList.add("details-button");
+    detailsButton.className = "details-button";
     detailsButton.type = "button";
     detailsButton.textContent = "Voir détails";
-
-    // Ouvrir la modale du produit sélectionné
-    detailsButton.addEventListener("click", () => {
-      openProductModal(item);
-    });
+    detailsButton.addEventListener("click", () => openProductModal(item));
 
     footer.append(price, detailsButton);
     productInfo.append(category, title, description, footer);
     card.append(imageContainer, productInfo);
-
-    cardsGrid.appendChild(card);
+    fragment.appendChild(card);
   });
+
+  cardsGrid.appendChild(fragment);
 }
-
-
-//OUVRIR LA FENÊTRE MODALE
 
 function openProductModal(item) {
   modalImage.src = item.image;
   modalImage.alt = item.title;
-
   modalTitle.textContent = item.title;
   modalCategory.textContent = item.category;
   modalDescription.textContent = item.shortDescription;
   modalDetails.textContent = item.fullDetails;
   modalPrice.textContent = item.metric;
-
   modal.showModal();
 }
 
-// FILTRER LES PRODUITS
-
+// --- Recherche, filtres et tri ---------------------------------------------
 function filterItems() {
-  const searchText = searchInput.value.toLowerCase().trim();
+  const searchText = searchInput.value.toLocaleLowerCase("fr").trim();
   const selectedCategory = categoryFilter.value;
 
   return catalogItems.filter((item) => {
-    // Vérifier si le texte existe dans le titre, et le nom de catégorie
-    const matchesSearch =
-      item.title.toLowerCase().includes(searchText) ||
-      item.category.toLowerCase().includes(searchText);
-
-    // Vérifier la catégorie sélectionnée
-    const matchesCategory =
-      selectedCategory === "all" ||
-      item.category === selectedCategory;
-
-    return matchesSearch && matchesCategory;
+    const matchesSearch = item.title.toLocaleLowerCase("fr").includes(searchText) ||
+      item.category.toLocaleLowerCase("fr").includes(searchText);
+    const matchesCategory = selectedCategory === "all" || item.category === selectedCategory;
+    const matchesFavorite = !favoritesOnly || favorites.has(String(item.id));
+    return matchesSearch && matchesCategory && matchesFavorite;
   });
 }
 
-
-//TRIER LES PRODUITS
-
-
-function sortItems(data) {
-  const sortValue = sortSelect.value;
-
-  // Créer une copie pour ne pas modifier le tableau original
-  const sortedItems = [...data];
-
-  switch (sortValue) {
-    case "title-asc":
-      sortedItems.sort((a, b) =>
-        // compare les titres de deux produits, a et b, pour les trier par ordre alphabétique.
-        a.title.localeCompare(b.title)
-      );
-      break;
-
-    case "title-desc":
-      sortedItems.sort((a, b) =>
-        b.title.localeCompare(a.title)
-      );
-      break;
-
-    case "price-asc":
-      sortedItems.sort((a, b) =>
-        getPrice(a.metric) - getPrice(b.metric)
-      );
-      break;
-
-    case "price-desc":
-      sortedItems.sort((a, b) =>
-        getPrice(b.metric) - getPrice(a.metric)
-      );
-      break;
-
-    // Conserver l'ordre d'origine
-    // si aucune option de tri n'est sélectionnée
-    case "default":
-    default:
-      break;
-  }
-
-  return sortedItems;
-}
-
-
-/* ========================================
-   6. EXTRAIRE LE PRIX NUMÉRIQUE
-======================================== */
-
 function getPrice(priceText) {
-  // Exemple : "350 MAD" devient 350
-  return Number.parseFloat(
-    String(priceText).replace(/[^\d.,]/g, "").replace(",", ".")
-  ) || 0;
+  const normalized = String(priceText).replace(/[^\d.,]/g, "").replace(",", ".");
+  const price = Number.parseFloat(normalized);
+  return Number.isFinite(price) ? price : 0;
 }
 
+function sortItems(items) {
+  const sorted = [...items];
+  switch (sortSelect.value) {
+    case "title-asc": sorted.sort((a, b) => a.title.localeCompare(b.title, "fr")); break;
+    case "title-desc": sorted.sort((a, b) => b.title.localeCompare(a.title, "fr")); break;
+    case "price-asc": sorted.sort((a, b) => getPrice(a.metric) - getPrice(b.metric)); break;
+    case "price-desc": sorted.sort((a, b) => getPrice(b.metric) - getPrice(a.metric)); break;
+  }
+  return sorted;
+}
 
-// OUVRIR / FERMER LE FORMULAIRE D'AJOUT
+function updateCatalog() {
+  updateFavoritesControl();
+  renderItems(sortItems(filterItems()));
+}
+
+searchInput.addEventListener("input", updateCatalog);
+categoryFilter.addEventListener("change", updateCatalog);
+sortSelect.addEventListener("change", updateCatalog);
+favoritesFilterButton.addEventListener("click", () => {
+  favoritesOnly = !favoritesOnly;
+  updateCatalog();
+});
+resetButton.addEventListener("click", () => {
+  searchInput.value = "";
+  categoryFilter.value = "all";
+  sortSelect.value = "default";
+  favoritesOnly = false;
+  updateCatalog();
+});
+closeModalButton.addEventListener("click", () => modal.close());
+modal.addEventListener("click", (event) => {
+  if (event.target === modal) modal.close();
+});
+
+// --- Formulaire d'ajout -----------------------------------------------------
 function openAddItemModal() {
-  addItemFeedback.textContent = "";
+  clearAddItemErrors();
   addItemModal.showModal();
   addItemFields.title.focus();
 }
-
-function closeAddItemModal() {
-  addItemModal.close();
-}
-
+function closeAddItemModal() { addItemModal.close(); }
 function clearAddItemErrors() {
-  addItemForm.querySelectorAll(".field-error").forEach((element) => { element.textContent = ""; });
+  addItemForm.querySelectorAll(".field-error").forEach((node) => { node.textContent = ""; });
   Object.values(addItemFields).forEach((field) => field.removeAttribute("aria-invalid"));
   addItemFeedback.textContent = "";
 }
@@ -262,12 +321,12 @@ function showAddItemErrors() {
   const messages = {
     title: "Saisissez le nom de l’article.",
     category: "Choisissez une catégorie.",
-    price: "Saisissez un prix supérieur à 0.",
-    image: "Saisissez une URL d’image valide (http ou https).",
+    price: "Saisissez un prix valide supérieur à zéro.",
+    image: "Saisissez une URL d’image valide commençant par http ou https.",
     shortDescription: "Ajoutez une courte description.",
     fullDetails: "Ajoutez une description détaillée."
   };
-  let firstInvalidField = null;
+  let firstInvalid = null;
 
   Object.entries(addItemFields).forEach(([name, field]) => {
     let message = "";
@@ -279,16 +338,17 @@ function showAddItemErrors() {
         if (!["http:", "https:"].includes(url.protocol)) message = messages.image;
       } catch (_) { message = messages.image; }
     }
+    const errorElement = document.getElementById(`${name}-error`);
+    if (errorElement) errorElement.textContent = message;
     if (message) {
-      document.getElementById(`${name}-error`).textContent = message;
       field.setAttribute("aria-invalid", "true");
-      firstInvalidField ||= field;
+      if (!firstInvalid) firstInvalid = field;
     }
   });
 
-  if (firstInvalidField) {
+  if (firstInvalid) {
     addItemFeedback.textContent = "Vérifiez les champs indiqués avant de continuer.";
-    firstInvalidField.focus();
+    firstInvalid.focus();
     return false;
   }
   return true;
@@ -311,18 +371,14 @@ function createCatalogItem(formData) {
 openAddItemButton.addEventListener("click", openAddItemModal);
 closeAddItemButton.addEventListener("click", closeAddItemModal);
 cancelAddItemButton.addEventListener("click", closeAddItemModal);
-
-// Fermer aussi en cliquant sur la zone de fond du dialogue.
 addItemModal.addEventListener("click", (event) => {
   if (event.target === addItemModal) closeAddItemModal();
 });
-
-// Effacer les messages au fur et à mesure que l'utilisateur corrige un champ.
 Object.entries(addItemFields).forEach(([name, field]) => {
   field.addEventListener("input", () => {
     field.removeAttribute("aria-invalid");
-    const error = document.getElementById(`${name}-error`);
-    if (error) error.textContent = "";
+    const errorElement = document.getElementById(`${name}-error`);
+    if (errorElement) errorElement.textContent = "";
     addItemFeedback.textContent = "";
   });
 });
@@ -330,8 +386,6 @@ Object.entries(addItemFields).forEach(([name, field]) => {
 addItemForm.addEventListener("submit", (event) => {
   event.preventDefault();
   clearAddItemErrors();
-
-  // Le navigateur vérifie aussi required, type, min/max, step et maxlength.
   const customValidationPassed = showAddItemErrors();
   if (!addItemForm.checkValidity() || !customValidationPassed) {
     addItemForm.reportValidity();
@@ -340,87 +394,21 @@ addItemForm.addEventListener("submit", (event) => {
 
   const newItem = createCatalogItem(new FormData(addItemForm));
   catalogItems.push(newItem);
+  const persisted = persistAddedItems();
 
-  try {
-    persistAddedItems();
-  } catch (error) {
-    // L'article reste visible en mémoire même si le navigateur bloque le stockage.
-    console.warn("L'article a été ajouté, mais la sauvegarde locale a échoué.", error);
-    addItemFeedback.textContent = "Article ajouté à cette session, mais la sauvegarde locale a échoué.";
-  }
-
-  // Actualiser sans recharger la page et afficher la nouvelle carte même si un filtre était actif.
+  // Retirer les contraintes de filtrage afin de rendre la nouvelle carte visible.
   searchInput.value = "";
   categoryFilter.value = "all";
   sortSelect.value = "default";
+  favoritesOnly = false;
   updateCatalog();
 
   addItemForm.reset();
   clearAddItemErrors();
   closeAddItemModal();
-
-  // Faire défiler jusqu'à la grille pour que la carte ajoutée soit facile à repérer.
+  if (!persisted) console.warn("L’article est visible pour cette session, mais sa sauvegarde locale a échoué.");
   cardsGrid.lastElementChild?.scrollIntoView({ behavior: "smooth", block: "nearest" });
 });
 
-// METTRE À JOUR LE CATALOGUE
-
-function updateCatalog() {
-  // Étape 1 : filtrer les produits
-  const filteredItems = filterItems();
-
-  // Étape 2 : trier les produits filtrés
-  const sortedItems = sortItems(filteredItems);
-
-  // Étape 3 : afficher le résultat
-  renderItems(sortedItems);
-}
-
-
-//GÉRER LES ÉVÉNEMENTS
-
-
-// Recherche en temps réel
-searchInput.addEventListener("input", updateCatalog);
-
-// Filtre par catégorie
-categoryFilter.addEventListener("change", updateCatalog);
-
-// Tri par titre ou par prix
-sortSelect.addEventListener("change", updateCatalog);
-
-// Fermer la modale avec le bouton
-closeModalButton.addEventListener("click", () => {
-  modal.close();
-});
-
-// Fermer la modale en cliquant sur le fond sombre
-modal.addEventListener("click", (event) => {
-  if (event.target === modal) {
-    modal.close();
-  }
-});
-
-// Fermer la modale avec Échap
-// Le navigateur gère déjà ce comportement avec <dialog>
-// et showModal()
-
-
-// Réinitialiser la recherche, le filtre et le tri
-resetButton.addEventListener("click", () => {
-  searchInput.value = "";
-  categoryFilter.value = "all";
-  sortSelect.value = "default";
-
-  updateCatalog();
-});
-
-
-
-// Afficher tous les produits au chargement
+// Première mise à jour de l'interface.
 updateCatalog();
-
-
-
-
-

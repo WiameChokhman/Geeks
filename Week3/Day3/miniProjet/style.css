@@ -1429,4 +1429,227 @@ a:focus-visible {
   .primary-action, .secondary-action { transition: none; }
 }
 
+/* ==========================================
+   15. EN-TÊTE FIXE, THÈME ET FAVORIS
+========================================== */
+:root {
+  color-scheme: light;
+  --surface: #ffffff;
+  --surface-soft: #faf7f2;
+  --surface-raised: #ffffff;
+  --text-strong: #372e29;
+  --shadow-header: 0 8px 26px rgba(53, 39, 30, 0.09);
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --ivory: #171614;
+  --white: #22201d;
+  --cream: #302820;
+  --brown: #f0dfca;
+  --brown-light: #d0bca7;
+  --gold: #d5ad7c;
+  --gold-light: #856a4e;
+  --text: #f0e8df;
+  --muted: #b8aa9b;
+  --border: #40382f;
+  --surface: #22201d;
+  --surface-soft: #2a2723;
+  --surface-raised: #292621;
+  --text-strong: #f0e8df;
+  --shadow-header: 0 8px 26px rgba(0, 0, 0, 0.3);
+}
+
+body {
+  color: var(--text);
+  background: var(--ivory);
+  transition: background-color var(--transition), color var(--transition);
+}
+
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: color-mix(in srgb, var(--white) 92%, transparent);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  transition: box-shadow var(--transition), background-color var(--transition), border-color var(--transition);
+}
+
+.site-header.is-scrolled {
+  box-shadow: var(--shadow-header);
+  border-bottom-color: transparent;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.icon-action {
+  display: inline-grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  color: var(--text);
+  background: var(--surface-soft);
+  font-size: 21px;
+  line-height: 1;
+  transition: transform var(--transition), background-color var(--transition), border-color var(--transition);
+}
+
+.icon-action:hover {
+  transform: translateY(-1px);
+  border-color: var(--gold-light);
+  background: var(--cream);
+}
+
+.icon-action:focus-visible,
+.favorite-button:focus-visible,
+.favorites-filter:focus-visible {
+  outline: 3px solid var(--gold);
+  outline-offset: 3px;
+}
+
+.favorites-filter {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 42px;
+  padding: 9px 14px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  color: var(--text);
+  background: var(--surface);
+  font: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  transition: color var(--transition), background-color var(--transition), border-color var(--transition), transform var(--transition);
+}
+
+.favorites-filter > span:first-child {
+  color: #b44c5a;
+  font-size: 18px;
+  line-height: 1;
+}
+
+.favorites-filter:hover { transform: translateY(-1px); border-color: var(--gold-light); }
+.favorites-filter.is-active { color: var(--white); background: var(--brown); border-color: var(--brown); }
+.favorites-filter.is-active > span:first-child { color: #f3a3ac; }
+.favorites-count {
+  display: inline-grid;
+  place-items: center;
+  min-width: 21px;
+  height: 21px;
+  padding: 0 5px;
+  border-radius: 999px;
+  background: var(--surface-soft);
+  color: var(--text);
+  font-size: 11px;
+}
+.favorites-filter.is-active .favorites-count { background: rgba(255,255,255,.16); color: inherit; }
+
+.product-image-container { position: relative; }
+.favorite-button {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 2;
+  display: inline-grid;
+  place-items: center;
+  width: 39px;
+  height: 39px;
+  padding: 0;
+  border: 1px solid rgba(255,255,255,.7);
+  border-radius: 50%;
+  color: #9f4754;
+  background: rgba(255,255,255,.94);
+  box-shadow: 0 3px 12px rgba(0,0,0,.12);
+  font-family: Arial, sans-serif;
+  font-size: 25px;
+  line-height: 1;
+  transition: transform var(--transition), background-color var(--transition), color var(--transition);
+}
+.favorite-button:hover { transform: scale(1.08); }
+.favorite-button.is-favorite { color: #c33f55; background: #fff0f2; }
+
+/* Adaptation des surfaces principales au thème sombre. */
+:root[data-theme="dark"] .site-header,
+:root[data-theme="dark"] .product-card,
+:root[data-theme="dark"] .filters-row,
+:root[data-theme="dark"] .empty-state,
+:root[data-theme="dark"] .form-modal,
+:root[data-theme="dark"] #product-modal,
+:root[data-theme="dark"] .site-footer {
+  color: var(--text);
+  background-color: var(--surface);
+  border-color: var(--border);
+}
+
+:root[data-theme="dark"] .hero {
+  background: #302820;
+}
+:root[data-theme="dark"] .hero-content h1,
+:root[data-theme="dark"] .brand-block,
+:root[data-theme="dark"] .brand-name,
+:root[data-theme="dark"] .form-modal-heading h2,
+:root[data-theme="dark"] .product-title,
+:root[data-theme="dark"] .controls-heading h2 {
+  color: var(--text);
+}
+:root[data-theme="dark"] .hero-content p,
+:root[data-theme="dark"] .hero-note,
+:root[data-theme="dark"] .controls-heading p,
+:root[data-theme="dark"] .product-description,
+:root[data-theme="dark"] .catalog-toolbar-hint {
+  color: var(--muted);
+}
+:root[data-theme="dark"] #search-input,
+:root[data-theme="dark"] .filter-group select,
+:root[data-theme="dark"] .form-field input,
+:root[data-theme="dark"] .form-field select,
+:root[data-theme="dark"] .form-field textarea {
+  color: var(--text);
+  background: var(--surface-soft);
+  border-color: var(--border);
+}
+:root[data-theme="dark"] .details-button,
+:root[data-theme="dark"] .secondary-action {
+  color: var(--text);
+  background: var(--surface-soft);
+  border-color: var(--border);
+}
+:root[data-theme="dark"] .modal-info,
+:root[data-theme="dark"] .modal-inner {
+  color: var(--text);
+  background: var(--surface);
+}
+
+@media (max-width: 760px) {
+  .site-header {
+    flex-wrap: wrap;
+    gap: 12px;
+    padding: 12px 18px;
+  }
+  .brand-name { font-size: 27px; }
+  .header-search { order: 3; flex: 1 1 100%; }
+  .header-search label { display: none; }
+  #search-input { width: 100%; }
+  .header-actions { margin-left: auto; }
+  .filters-row { flex-wrap: wrap; }
+  .favorites-filter { flex: 0 0 auto; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .site-header,
+  .icon-action,
+  .favorites-filter,
+  .favorite-button,
+  body { transition: none !important; }
+}
 
