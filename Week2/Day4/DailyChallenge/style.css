@@ -1,0 +1,248 @@
+/* ---------- Base ---------- */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  color: #0a0a0a;
+  background: #f6f9fc;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.brand {
+  font-size: 26px;
+  font-weight: 800;
+  letter-spacing: -1px;
+}
+
+/* ---------- Header ---------- */
+.site-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 48px;
+}
+
+nav a {
+  margin: 0 18px;
+  font-size: 14px;
+}
+
+/* Hover : liens de navigation (header et footer) */
+nav a:hover {
+  color: #ff3b00;
+}
+
+.cart {
+  font-size: 14px;
+}
+
+/* ---------- Hero ---------- */
+.hero {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  gap: 40px;
+  padding: 40px 48px;
+  background: linear-gradient(135deg, #e9f0f6, #c8d8e5);
+}
+
+.label {
+  font-size: 11px;
+  letter-spacing: 3px;
+  margin-bottom: 20px;
+}
+
+.hero h1 {
+  font-size: 64px;
+  line-height: 1;
+  letter-spacing: -2px;
+  margin-bottom: 20px;
+}
+
+.hero-desc {
+  margin-bottom: 28px;
+}
+
+.hero img {
+  width: 100%;
+  height: 300px;
+  object-fit: cover;
+}
+
+/* Sélecteur d'attribut : le lien qui mène à la section produits */
+.hero a[href="#products"] {
+  display: inline-block;
+  padding: 14px 22px;
+  background: #ff3b00;
+  color: #fff;
+  font-size: 14px;
+  border-radius: 4px;
+}
+
+.hero a[href="#products"]:hover {
+  background: #cc2f00;
+}
+/* ---------- Produits ---------- */
+#products {
+  padding: 40px 48px;
+}
+
+#products h2 {
+  font-size: 28px;
+  margin-bottom: 20px;
+}
+
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+/* Classe réutilisable pour les 3 cartes */
+.product-card {
+  display: grid;
+  grid-template-columns: 1fr auto; /* texte à gauche, prix/bouton à droite */
+  align-items: center;
+  row-gap: 6px;
+  padding: 0 0 14px;
+  background: #fff;
+  border: 2px solid #e3e8ec;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.product-card img {
+  grid-column: 1 / -1;     /* image sur toute la largeur */
+  width: 100%;
+  height: 220px;           /* même taille pour toutes */
+  object-fit: cover;       /* sans étirement */
+  margin-bottom: 10px;
+}
+
+.product-card h3,
+.product-card p {
+  padding-left: 14px;
+}
+
+.price {
+  padding-right: 14px;
+  font-weight: bold;
+  text-align: right;
+}
+
+/* Sélecteur enfant direct : descriptions */
+.product-card > p {
+  font-size: 13px;
+  color: #555;
+}
+
+.product-card button {
+  margin-right: 14px;
+  padding: 8px 18px;
+  background: #ff3b00;
+  color: #fff;
+  font-size: 12px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+/* Hover : boutons produits */
+.product-card button:hover {
+  background: #cc2f00;
+}
+
+
+/* ---------- Footer ---------- */
+.site-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 24px 48px;
+  font-size: 13px;
+}
+
+.footer-brand {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.footer-brand .brand {
+  font-size: 20px;
+}
+
+.site-header {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr; /* logo | menu centré | panier */
+  align-items: center;
+  padding: 20px 48px;
+}
+
+.cart {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  justify-self: end;
+  font-size: 14px;
+}
+
+.tagline {
+  position: absolute;
+  top: 24px;
+  right: 24px;
+  writing-mode: vertical-rl;
+  font-size: 9px;
+  letter-spacing: 3px;
+}
+.site-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 24px 48px;
+  font-size: 13px;
+}
+
+.footer-brand,
+.footer-right,
+.social {
+  display: flex;
+  align-items: center;
+}
+
+.footer-brand {
+  gap: 20px;
+}
+
+/* Petit trait vertical entre le logo et la phrase */
+.footer-brand p {
+  padding-left: 20px;
+  border-left: 1px solid #999;
+}
+
+.footer-right {
+  gap: 20px;
+}
+
+.footer-right nav a {
+  margin: 0 0 0 16px;
+}
+
+/* Petit trait vertical entre les liens et les icônes */
+.social {
+  gap: 14px;
+  padding-left: 20px;
+  border-left: 1px solid #999;
+}
+
+.social a:hover {
+  color: #ff3b00;
+}
