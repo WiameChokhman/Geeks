@@ -1,0 +1,127 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Morse Translator</title>
+</head>
+<body>
+
+    <h1>Morse Code Translator</h1>
+
+    <div id="result"></div>
+
+    <script>
+        const morse = `{
+          "0": "-----",
+          "1": ".----",
+          "2": "..---",
+          "3": "...--",
+          "4": "....-",
+          "5": ".....",
+          "6": "-....",
+          "7": "--...",
+          "8": "---..",
+          "9": "----.",
+          "a": ".-",
+          "b": "-...",
+          "c": "-.-.",
+          "d": "-..",
+          "e": ".",
+          "f": "..-.",
+          "g": "--.",
+          "h": "....",
+          "i": "..",
+          "j": ".---",
+          "k": "-.-",
+          "l": ".-..",
+          "m": "--",
+          "n": "-.",
+          "o": "---",
+          "p": ".--.",
+          "q": "--.-",
+          "r": ".-.",
+          "s": "...",
+          "t": "-",
+          "u": "..-",
+          "v": "...-",
+          "w": ".--",
+          "x": "-..-",
+          "y": "-.--",
+          "z": "--..",
+          ".": ".-.-.-",
+          ",": "--..--",
+          "?": "..--..",
+          "!": "-.-.--",
+          "-": "-....-",
+          "/": "-..-.",
+          "@": ".--.-.",
+          "(": "-.--.",
+          ")": "-.--.-"
+        }`;
+
+        // On transforme la chaîne JSON en objet JavaScript.
+        function toJs() {
+            return new Promise((resolve, reject) => {
+
+                const morseJS = JSON.parse(morse);
+
+                if (Object.keys(morseJS).length === 0) {
+                    reject("The Morse object is empty!");
+                } else {
+                    resolve(morseJS);
+                }
+
+            });
+        }
+
+        // On demande un texte à l'utilisateur et on le traduit en morse.
+        function toMorse(morseJS) {
+            return new Promise((resolve, reject) => {
+
+                const word = prompt("Enter a word or a sentence:");
+
+                const letters = word.toLowerCase().split("");
+
+                const translation = [];
+
+                for (let letter of letters) {
+
+                    if (letter === " ") {
+                        translation.push("/");
+                    } 
+                    else if (morseJS[letter] === undefined) {
+                        reject(`The character "${letter}" doesn't exist in Morse!`);
+                        return;
+                    } 
+                    else {
+                        translation.push(morseJS[letter]);
+                    }
+                }
+
+                resolve(translation);
+
+            });
+        }
+
+        // On affiche la traduction sur la page.
+        function joinWords(morseTranslation) {
+
+            const result = morseTranslation.join("\n");
+
+            document.getElementById("result").innerText = result;
+        }
+
+        // On enchaîne les étapes et on affiche les erreurs si besoin.
+        toJs()
+            .then(morseJS => toMorse(morseJS))
+            .then(morseTranslation => joinWords(morseTranslation))
+            .catch(error => {
+                document.getElementById("result").innerText = error;
+                console.log(error);
+            });
+
+    </script>
+
+</body>
+</html>
