@@ -1,0 +1,22 @@
+
+.container {
+  max-width: 600px;
+  margin: 100px auto;
+  padding: 30px;
+  text-align: center;
+  font-family: Arial, sans-serif;
+}
+
+input {
+  padding: 12px;
+  width: 65%;
+}
+
+button {
+  padding: 12px 20px;
+  margin-left: 10px;
+  background: #2563eb;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
